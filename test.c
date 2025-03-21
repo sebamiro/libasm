@@ -103,7 +103,7 @@ void TestWrite(char* str)
 		ssize_t testErrorRet = ft_write(-1, str, 0);
 		int testErrno = errno;
 		assertSize(expErrorRet, testErrorRet);
-		assertSize(expErrno, testErrno);
+		ok += assertSize(expErrno, testErrno);
 		return;
 	}
 
@@ -133,7 +133,7 @@ void TestRead(char* str)
 		ssize_t testErrorRet = ft_read(-1, str, 0);
 		int testErrno = errno;
 		assertSize(expErrorRet, testErrorRet);
-		assertSize(expErrno, testErrno);
+		ok += assertSize(expErrno, testErrno);
 		return;
 	}
 
