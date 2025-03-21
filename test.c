@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <errno.h>
 #include <sys/stat.h>
 
 #include "type.h"
@@ -13,34 +14,12 @@
 extern size_t ft_strlen(char* s);
 extern char* ft_strcpy(char* dest, char* str);
 extern int ft_strcmp(char* s1, char* s2);
+extern char* ft_strdup(char* str);
+extern ssize_t ft_write(int fd, void*str, size_t size);
+extern ssize_t ft_read(int fd, void*str, size_t size);
 
 static int total;
 static int ok;
-
-char* ft_strdup(char* str)
-{
-	(void)str;
-	char *res = malloc(10);
-	return res;
-}
-
-
-ssize_t ft_write(int fd, void*str, size_t size)
-{
-	(void)fd;
-	(void)str;
-	(void)size;
-	return -1;
-}
-
-ssize_t ft_read(int fd, void*str, size_t size)
-{
-	(void)fd;
-	(void)str;
-	(void)size;
-	return -1;
-}
-
 
 int assertString(char* exp, char* got)
 {
@@ -117,6 +96,17 @@ void TestWrite(char* str)
 {
 	total++;
 	printf("  [%s]: ", str);
+	if (!str)
+	{
+		ssize_t expErrorRet = write(-1, str, 0);
+		int expErrno = errno;
+		ssize_t testErrorRet = ft_write(-1, str, 0);
+		int testErrno = errno;
+		assertSize(expErrorRet, testErrorRet);
+		assertSize(expErrno, testErrno);
+		return;
+	}
+
 	assert(strlen(str) < 20);
 
 	char expBuf[20];
@@ -135,6 +125,18 @@ void TestRead(char* str)
 {
 	total++;
 	printf("  [%s]: ", str);
+
+	if (!str)
+	{
+		ssize_t expErrorRet = read(-1, str, 0);
+		int expErrno = errno;
+		ssize_t testErrorRet = ft_read(-1, str, 0);
+		int testErrno = errno;
+		assertSize(expErrorRet, testErrorRet);
+		assertSize(expErrno, testErrno);
+		return;
+	}
+
 	assert(strlen(str) < 20);
 
 	char expBuf[20];
@@ -142,9 +144,9 @@ void TestRead(char* str)
 	int fd[2];
 	pipe(fd);
 	write(fd[1], str, strlen(str));
-	ssize_t expSize = read(fd[0], expBuf, strlen(str));
-	write(fd[1], str, strlen(str));
 	ssize_t testSize = ft_read(fd[0], testBuf, strlen(str));
+	write(fd[1], str, strlen(str));
+	ssize_t expSize = read(fd[0], expBuf, strlen(str));
 	assertSize(expSize, testSize);
 	ok += assertString(expBuf, testBuf);
 }
@@ -167,21 +169,24 @@ int main(void)
 	TestStrcpy("Holas Que tal");
 	TestStrcpy("");
 
-	printf("------- strdup --------\n");
-	TestStrdup("asda");
-	TestStrdup("Holas Que tal");
-	TestStrdup("");
-
 	printf("------- strcmp --------\n");
 	TestStrcmp("asda", "asda");
 	TestStrcmp("Hola", "asda");
 	TestStrcmp("", "asda");
 	TestStrcmp("asda", "");
 
+
+	printf("------- strdup --------\n");
+	TestStrdup("asda");
+	TestStrdup("Holas Que tal");
+	TestStrdup("");
+
 	printf("------- write --------\n");
 	TestWrite("Hola");
+	TestWrite(NULL);
 	printf("------- read --------\n");
 	TestRead("Hola");
+	TestRead(NULL);
 
 	printf("\n ok: %d/%d\n", ok, total);
 
