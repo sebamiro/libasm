@@ -1,3 +1,4 @@
+section .note.GNU-stack noalloc noexec nowrite progbits
 section .text
 GLOBAL ft_strcmp;
 ft_strcmp:

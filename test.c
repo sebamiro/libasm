@@ -11,12 +11,12 @@
 #include "time.c"
 #include "profile.c"
 
-extern size_t ft_strlen(char* s);
-extern char* ft_strcpy(char* dest, char* str);
-extern int ft_strcmp(char* s1, char* s2);
-extern char* ft_strdup(char* str);
-extern ssize_t ft_write(int fd, void*str, size_t size);
-extern ssize_t ft_read(int fd, void*str, size_t size);
+size_t ft_strlen(char* s);
+char* ft_strcpy(char* dest, char* str);
+int ft_strcmp(char* s1, char* s2);
+char* ft_strdup(char* str);
+ssize_t ft_write(int fd, void*str, size_t size);
+ssize_t ft_read(int fd, void*str, size_t size);
 
 static int total;
 static int ok;

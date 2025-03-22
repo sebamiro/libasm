@@ -1,3 +1,4 @@
+section .note.GNU-stack noalloc noexec nowrite progbits
 global ft_strcpy;
 section .text
 ft_strcpy:
