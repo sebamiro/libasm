@@ -4,6 +4,8 @@ TestSrc = test.c
 AsmSrc = ft_strlen.s ft_strcpy.s ft_strdup.s ft_strcmp.s ft_write.s ft_read.s
 AsmObj = $(AsmSrc:.s=.o)
 
+all: $(LibName) test
+
 $(LibName): $(AsmObj)
 	ar rcs $@ $(AsmObj)
 
@@ -14,5 +16,10 @@ test: $(TestSrc) $(LibName)
 	nasm -f elf64 $< -o $@
 
 clean:
+	rm -rf $(AsmObj)
+
+fclean:
 	rm -rf $(AsmObj) $(TestName) $(LibName)
+
+re: fclean all
 
