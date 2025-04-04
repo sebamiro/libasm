@@ -6,11 +6,6 @@
 #include <errno.h>
 #include <sys/stat.h>
 
-#include "type.h"
-
-#include "time.c"
-#include "profile.c"
-
 size_t ft_strlen(char* s);
 char* ft_strcpy(char* dest, char* str);
 int ft_strcmp(char* s1, char* s2);
@@ -154,8 +149,6 @@ void TestRead(char* str)
 
 int main(void)
 {
-	Prfl_Start;
-
 	char ptrString[] = "ptrString";
 	printf("------- strlen --------\n");
 	TestStrlen("Tast");
@@ -189,6 +182,4 @@ int main(void)
 	TestRead(NULL);
 
 	printf("\n ok: %d/%d\n", ok, total);
-
-	Prfl_End();
 }
